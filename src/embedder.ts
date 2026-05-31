@@ -17,6 +17,18 @@ export function processElements(
 		iframe.src = provider.toEmbedUrl(src);
 		iframe.allow = "autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture";
 		iframe.loading = "lazy";
+		iframe.classList.add("lazy-embed");
+		iframe.style.width = "100%";
+		iframe.style.height = "152px";
+		iframe.style.border = "none";
+		iframe.style.borderRadius = "12px";
+		iframe.style.display = "block";
 		img.replaceWith(iframe);
+
+		// Obsidian の image-embed/image-wrapper コンテナを full-width に展開する
+		for (const cls of ["image-wrapper", "image-embed"]) {
+			const el = iframe.closest<HTMLElement>(`.${cls}`);
+			if (el) el.style.width = "100%";
+		}
 	}
 }
