@@ -1,0 +1,19 @@
+iframe.lazy-embed {
+	display: block;
+	width: 100%;
+	height: 152px;
+	border: none;
+	border-radius: 12px;
+}
+
+.image-embed:has(iframe.lazy-embed),
+.image-embed:has(iframe.lazy-embed) .image-wrapper {
+	width: 100% !important;
+	max-width: 100% !important;
+}
+
+/* Live Preview: iframeを含む行のブロックマージンを除去 */
+.cm-line:has(iframe.lazy-embed) {
+	margin-bottom: 0;
+	line-height: 1;
+}
