@@ -1,7 +1,7 @@
 {
 	"id": "obsidian-lazy-embed",
 	"name": "Lazy Embed",
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"minAppVersion": "1.0.0",
 	"description": "Converts ![](<url>) syntax into embedded iframes at render time.",
 	"author": "no-la",
