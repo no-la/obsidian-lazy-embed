@@ -2,10 +2,11 @@ import { Plugin, PluginSettingTab, App, Setting } from "obsidian";
 import { providers } from "./providers/index";
 import { processElements } from "./embedder";
 import { LazyEmbedSettings, DEFAULT_SETTINGS } from "./settings";
-import { createLivePreviewExtension } from "./livePreview";
+import { watchEditorForEmbeds } from "./livePreview";
 
 export default class LazyEmbedPlugin extends Plugin {
 	settings!: LazyEmbedSettings;
+	private livePreviewObserver: MutationObserver | null = null;
 
 	async onload() {
 		await this.loadSettings();
@@ -14,11 +15,19 @@ export default class LazyEmbedPlugin extends Plugin {
 			processElements(element, providers, this.settings.enabledProviders);
 		});
 
-		this.registerEditorExtension(
-			createLivePreviewExtension(providers, () => this.settings)
-		);
+		this.app.workspace.onLayoutReady(() => {
+			this.livePreviewObserver = watchEditorForEmbeds(
+				this.app.workspace.containerEl,
+				providers,
+				() => this.settings
+			);
+		});
 
 		this.addSettingTab(new LazyEmbedSettingTab(this.app, this));
+	}
+
+	async onunload() {
+		this.livePreviewObserver?.disconnect();
 	}
 
 	async loadSettings() {
