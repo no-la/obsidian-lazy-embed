@@ -2,6 +2,7 @@ import { Plugin, PluginSettingTab, App, Setting } from "obsidian";
 import { providers } from "./providers/index";
 import { processElements } from "./embedder";
 import { LazyEmbedSettings, DEFAULT_SETTINGS } from "./settings";
+import { createLivePreviewExtension } from "./livePreview";
 
 export default class LazyEmbedPlugin extends Plugin {
 	settings!: LazyEmbedSettings;
@@ -12,6 +13,10 @@ export default class LazyEmbedPlugin extends Plugin {
 		this.registerMarkdownPostProcessor((element) => {
 			processElements(element, providers, this.settings.enabledProviders);
 		});
+
+		this.registerEditorExtension(
+			createLivePreviewExtension(providers, () => this.settings)
+		);
 
 		this.addSettingTab(new LazyEmbedSettingTab(this.app, this));
 	}
